@@ -50,3 +50,11 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+input/*.ctrl
+input/*.multi
+input/*.operation
+input/*.reinit
+input/*_ss.soil
+output/
+/Cycles
