@@ -1,0 +1,15 @@
+#R_NAME = Southern Nations, Nationalities and Peoples
+#Z_NAME = Alaba
+#W_NAME = Alaba
+# Latitude = 7.401199102 Longitude = 38.20199203
+CURVE_NUMBER    75
+SLOPE           7.5409765
+TOTAL_LAYERS    7
+LAYER   THICK   CLAY    SAND    ORGANIC BD      FC      PWP     SON     NO3     NH4     BYP_H   BYP_V
+1       0.05    40      35      13.1    1.237   -999    -999    -999    1       1       0.0     0.0
+2       0.1     41      35      2.9     1.136   -999    -999    -999    1       1       0.0     0.0
+3       0.15    43      33      2.6     1.177   -999    -999    -999    1       1       0.0     0.0
+4       0.3     45      32      1.7     1.252   -999    -999    -999    1       1       0.0     0.0
+5       0.3     45      32      1.3     1.294   -999    -999    -999    1       1       0.0     0.0
+6       0.4     46      32      1.0     1.328   -999    -999    -999    1       1       0.0     0.0
+7       1.0     46      32      0.9     1.365   -999    -999    -999    1       1       0.0     0.0

@@ -1,0 +1,15 @@
+#R_NAME = Southern Nations, Nationalities and Peoples
+#Z_NAME = Keffa
+#W_NAME = Gesha (Deka)
+# Latitude = 7.653530836 Longitude = 35.70163536
+CURVE_NUMBER    75
+SLOPE           9.863939
+TOTAL_LAYERS    7
+LAYER   THICK   CLAY    SAND    ORGANIC BD      FC      PWP     SON     NO3     NH4     BYP_H   BYP_V
+1       0.05    40      30      5.6     1.174   -999    -999    -999    1       1       0.0     0.0
+2       0.1     40      30      4.9     1.025   -999    -999    -999    1       1       0.0     0.0
+3       0.15    43      29      3.9     1.069   -999    -999    -999    1       1       0.0     0.0
+4       0.3     43      28      2.8     1.196   -999    -999    -999    1       1       0.0     0.0
+5       0.3     45      28      1.8     1.204   -999    -999    -999    1       1       0.0     0.0
+6       0.4     47      27      1.5     1.245   -999    -999    -999    1       1       0.0     0.0
+7       1.0     45      28      0.9     1.268   -999    -999    -999    1       1       0.0     0.0

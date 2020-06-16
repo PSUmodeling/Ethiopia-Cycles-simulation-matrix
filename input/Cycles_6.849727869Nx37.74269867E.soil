@@ -1,0 +1,15 @@
+#R_NAME = Southern Nations, Nationalities and Peoples
+#Z_NAME = Wolayita
+#W_NAME = Sodo Zuria
+# Latitude = 6.849727869 Longitude = 37.74269867
+CURVE_NUMBER    75
+SLOPE           2.8666492
+TOTAL_LAYERS    7
+LAYER   THICK   CLAY    SAND    ORGANIC BD      FC      PWP     SON     NO3     NH4     BYP_H   BYP_V
+1       0.05    42      33      12.0    1.244   -999    -999    -999    1       1       0.0     0.0
+2       0.1     43      32      2.8     1.134   -999    -999    -999    1       1       0.0     0.0
+3       0.15    45      30      2.1     1.183   -999    -999    -999    1       1       0.0     0.0
+4       0.3     51      26      1.5     1.226   -999    -999    -999    1       1       0.0     0.0
+5       0.3     54      24      1.0     1.268   -999    -999    -999    1       1       0.0     0.0
+6       0.4     56      23      0.7     1.301   -999    -999    -999    1       1       0.0     0.0
+7       1.0     56      24      0.6     1.358   -999    -999    -999    1       1       0.0     0.0

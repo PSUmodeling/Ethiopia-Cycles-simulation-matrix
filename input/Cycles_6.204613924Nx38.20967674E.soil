@@ -1,0 +1,15 @@
+#R_NAME = Southern Nations, Nationalities and Peoples
+#Z_NAME = Gedeo
+#W_NAME = Yirgachefe
+# Latitude = 6.204613924 Longitude = 38.20967674
+CURVE_NUMBER    75
+SLOPE           11.264144
+TOTAL_LAYERS    7
+LAYER   THICK   CLAY    SAND    ORGANIC BD      FC      PWP     SON     NO3     NH4     BYP_H   BYP_V
+1       0.05    36      39      5.4     1.11    -999    -999    -999    1       1       0.0     0.0
+2       0.1     36      39      3.9     1.068   -999    -999    -999    1       1       0.0     0.0
+3       0.15    39      37      3.4     1.131   -999    -999    -999    1       1       0.0     0.0
+4       0.3     42      36      2.1     1.249   -999    -999    -999    1       1       0.0     0.0
+5       0.3     45      36      1.3     1.297   -999    -999    -999    1       1       0.0     0.0
+6       0.4     46      34      0.9     1.333   -999    -999    -999    1       1       0.0     0.0
+7       1.0     46      34      0.4     1.357   -999    -999    -999    1       1       0.0     0.0

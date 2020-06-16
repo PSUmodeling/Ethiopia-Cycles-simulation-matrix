@@ -1,0 +1,15 @@
+#R_NAME = Southern Nations, Nationalities and Peoples
+#Z_NAME = Dawro
+#W_NAME = Esira
+# Latitude = 6.8460567 Longitude = 36.89499474
+CURVE_NUMBER    75
+SLOPE           48.783596
+TOTAL_LAYERS    7
+LAYER   THICK   CLAY    SAND    ORGANIC BD      FC      PWP     SON     NO3     NH4     BYP_H   BYP_V
+1       0.05    39      32      5.6     1.184   -999    -999    -999    1       1       0.0     0.0
+2       0.1     40      30      4.6     1.127   -999    -999    -999    1       1       0.0     0.0
+3       0.15    42      29      3.5     1.166   -999    -999    -999    1       1       0.0     0.0
+4       0.3     45      29      2.7     1.25    -999    -999    -999    1       1       0.0     0.0
+5       0.3     47      28      1.6     1.282   -999    -999    -999    1       1       0.0     0.0
+6       0.4     49      27      1.2     1.311   -999    -999    -999    1       1       0.0     0.0
+7       1.0     48      27      1.1     1.344   -999    -999    -999    1       1       0.0     0.0

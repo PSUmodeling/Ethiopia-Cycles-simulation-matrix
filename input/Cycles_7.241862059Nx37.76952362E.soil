@@ -1,0 +1,15 @@
+#R_NAME = Southern Nations, Nationalities and Peoples
+#Z_NAME = Kembata Tembaro
+#W_NAME = Kacha Bira
+# Latitude = 7.241862059 Longitude = 37.76952362
+CURVE_NUMBER    75
+SLOPE           43.802547
+TOTAL_LAYERS    7
+LAYER   THICK   CLAY    SAND    ORGANIC BD      FC      PWP     SON     NO3     NH4     BYP_H   BYP_V
+1       0.05    33      38      12.3    1.151   -999    -999    -999    1       1       0.0     0.0
+2       0.1     36      34      2.8     1.101   -999    -999    -999    1       1       0.0     0.0
+3       0.15    38      33      2.5     1.129   -999    -999    -999    1       1       0.0     0.0
+4       0.3     42      30      1.5     1.172   -999    -999    -999    1       1       0.0     0.0
+5       0.3     47      28      1.1     1.212   -999    -999    -999    1       1       0.0     0.0
+6       0.4     48      28      0.7     1.236   -999    -999    -999    1       1       0.0     0.0
+7       1.0     49      27      0.6     1.275   -999    -999    -999    1       1       0.0     0.0

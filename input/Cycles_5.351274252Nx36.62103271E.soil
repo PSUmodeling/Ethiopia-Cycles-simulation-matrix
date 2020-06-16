@@ -1,0 +1,15 @@
+#R_NAME = Southern Nations, Nationalities and Peoples
+#Z_NAME = Debub Omo
+#W_NAME = Bena Tsemay
+# Latitude = 5.351274252 Longitude = 36.62103271
+CURVE_NUMBER    75
+SLOPE           8.599947
+TOTAL_LAYERS    7
+LAYER   THICK   CLAY    SAND    ORGANIC BD      FC      PWP     SON     NO3     NH4     BYP_H   BYP_V
+1       0.05    28      55      1.4     1.384   -999    -999    -999    1       1       0.0     0.0
+2       0.1     28      56      1.8     1.369   -999    -999    -999    1       1       0.0     0.0
+3       0.15    31      54      1.6     1.373   -999    -999    -999    1       1       0.0     0.0
+4       0.3     33      52      1.1     1.445   -999    -999    -999    1       1       0.0     0.0
+5       0.3     34      50      0.7     1.467   -999    -999    -999    1       1       0.0     0.0
+6       0.4     34      50      0.5     1.49    -999    -999    -999    1       1       0.0     0.0
+7       1.0     33      51      0.4     1.504   -999    -999    -999    1       1       0.0     0.0
