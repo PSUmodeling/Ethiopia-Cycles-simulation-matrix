@@ -5,18 +5,25 @@ import os
 '''
 Matrix configuration
 '''
-crops = ('Maize', 'Sorghum', 'SpringBarley', 'Teff')
 
 # Configuration with planting dates, fertilization rates, and baseline operation
-configs = {}
-configs['Maize'] = ((121, 128, 135, 142, 149, 156, 163, 170, 177, 184, 191),
+crops = {}
+crops['Teff'] = ((182, 189, 196, 203, 210, 217, 224, 231),
+                 (0, 30, 60), 'PD1FR2')
+crops['SpringBarley'] = ((135, 142, 149, 156, 163, 170, 177, 184, 191),
+                         (0, 25, 50, 100, 200), 'PD1FR3')
+crops['SpringWheat'] = ((135, 142, 149, 156, 163, 170, 177, 184, 191),
+                        (0, 25, 50, 100, 200), 'PD1FR3')
+crops['Maize'] = ((121, 128, 135, 142, 149, 156, 163, 170, 177, 184, 191),
                     (0, 25, 50, 100, 200, 400), 'PD1FR3')
-configs['Sorghum'] = ((121, 128, 135, 142, 149, 156, 163, 170, 177, 184, 191),
-                      (0, 25, 50, 100, 200, 400), 'PD1FR3')
-configs['SpringBarley'] = ((135, 142, 149, 156, 163, 170, 177, 184, 191),
-                     (0, 25, 50, 100, 200), 'PD1FR3')
-configs['Teff'] = ((182, 189, 196, 203, 210, 217, 224, 231),
-                   (0, 30, 60), 'PD1FR2')
+crops['Sorghum'] = ((121, 128, 135, 142, 149, 156, 163, 170, 177, 184, 191),
+                    (0, 25, 50, 100, 200, 400), 'PD1FR3')
+crops['Millet'] = ((182, 189, 196, 203, 210, 217, 224, 231),
+                   (0, 25, 50, 100, 200, 400), 'PD1FR3')
+crops['Chickpea'] = ((182, 189, 196, 203, 210, 217, 224, 231),
+                     (0,), 'PD1FR1')
+crops['Lentil'] = ((182, 189, 196, 203, 210, 217, 224, 231),
+                   (0,), 'PD1FR1')
 
 start_year = '2000'
 end_year = '2017'
@@ -54,15 +61,15 @@ def WriteCtrl(simulation, base, soil_file, weather_file):
         fp.write('REINIT_FILE             N/A\n')
 
 
-def WriteMulti(location, kcrop, config, start_year, end_year, crop_file,
+def WriteMulti(location, kcrop, crop, start_year, end_year, crop_file,
                soil_file, weather_file):
 
     simulation = location + 'CROP' + str(kcrop + 1)
 
     file_name = 'input/' + simulation + '.multi'
 
-    num_pd = len(config[0])
-    num_fr = len(config[1])
+    num_pd = len(crop[0])
+    num_fr = len(crop[1])
 
     with open(file_name, 'w') as fp:
         fp.write('%-20s' % ('SIM_CODE'))
@@ -100,17 +107,18 @@ def WriteMulti(location, kcrop, config, start_year, end_year, crop_file,
 '''
 Create operation files by replacing variables in a template operation file
 '''
-num_crops = len(crops)
-for kcrop in range(num_crops):
-    for kpd in range(len(configs[crops[kcrop]][0])):
-        pd = configs[crops[kcrop]][0][kpd]
+kcrop = 0
+for c in crops:
+    for kpd in range(len(crops[c][0])):
+        pd = crops[c][0][kpd]
 
-        for kfr in range(len(configs[crops[kcrop]][1])):
-            fr = configs[crops[kcrop]][1][kfr]
+        print(crops[c][1])
+        for kfr in range(len(crops[c][1])):
+            fr = crops[c][1][kfr]
 
             filen = 'input/CROP%dPD%dFR%d.operation' % (kcrop + 1, kpd + 1,
                                                         kfr + 1)
-            replacements = {'$CP':crops[kcrop], '$PD':str(pd), '$FR':str(fr),
+            replacements = {'$CP':c, '$PD':str(pd), '$FR':str(fr),
                             '$FD':str(pd - 10), '$TD':str(pd + 20)}
 
             with open('base.operation') as infile, open(filen, 'w') as outfile:
@@ -118,6 +126,7 @@ for kcrop in range(num_crops):
                     for src, target in replacements.items():
                         line = line.replace(src, target)
                     outfile.write(line)
+    kcrop += 1
 
 '''
 Create control files and run simulation matrix
@@ -128,12 +137,13 @@ with open('locations.txt') as fp:
         weather_file = line.split()[1]
         soil_file = line.split()[2]
 
-        for kcrop in range(num_crops):
+        kcrop = 0
+        for c in crops:
             simulation = '%sCROP%d' % (location, kcrop + 1)
-            base = 'CROP%d%s' % (kcrop + 1, configs[crops[kcrop]][2])
+            base = 'CROP%d%s' % (kcrop + 1, crops[c][2])
 
             WriteCtrl(simulation, base, soil_file, weather_file)
-            WriteMulti(location, kcrop, configs[crops[kcrop]], start_year,
+            WriteMulti(location, kcrop, crops[c], start_year,
                        end_year, crop_file, soil_file, weather_file)
 
             # Run baseline simulation in baseline model with spin-up
@@ -151,3 +161,5 @@ with open('locations.txt') as fp:
             print('Run batch simulations using re-initialization')
             cmd = './Cycles -b -m ' + simulation + '.multi'
             os.system(cmd)
+
+            kcrop += 1
