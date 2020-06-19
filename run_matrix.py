@@ -1,35 +1,12 @@
 #!/usr/bin/env python3
 
 import os
+from itertools import product
+from crop_matrix import crop_matrix
 
-'''
-Matrix configuration
-'''
-
-# Configuration with planting dates, fertilization rates, and baseline operation
-crops = {}
-crops['Teff'] = ((182, 189, 196, 203, 210, 217, 224, 231),
-                 (0, 30, 60), 'PD1FR2')
-crops['SpringBarley'] = ((135, 142, 149, 156, 163, 170, 177, 184, 191),
-                         (0, 25, 50, 100, 200), 'PD1FR3')
-crops['SpringWheat'] = ((135, 142, 149, 156, 163, 170, 177, 184, 191),
-                        (0, 25, 50, 100, 200), 'PD1FR3')
-crops['Maize'] = ((121, 128, 135, 142, 149, 156, 163, 170, 177, 184, 191),
-                    (0, 25, 50, 100, 200, 400), 'PD1FR3')
-crops['Sorghum'] = ((121, 128, 135, 142, 149, 156, 163, 170, 177, 184, 191),
-                    (0, 25, 50, 100, 200, 400), 'PD1FR3')
-crops['Millet'] = ((182, 189, 196, 203, 210, 217, 224, 231),
-                   (0, 25, 50, 100, 200, 400), 'PD1FR3')
-crops['Chickpea'] = ((182, 189, 196, 203, 210, 217, 224, 231),
-                     (0,), 'PD1FR1')
-crops['Lentil'] = ((182, 189, 196, 203, 210, 217, 224, 231),
-                   (0,), 'PD1FR1')
-
-start_year = '2000'
-end_year = '2017'
-crop_file = 'GenericCrops.crop'
-
-def WriteCtrl(simulation, base, soil_file, weather_file):
+def WriteCtrl(simulation, base,
+              start_year, end_year,
+              crop_file, soil_file, weather_file):
 
     file_name = 'input/' + simulation + '.ctrl'
     with open(file_name, 'w') as fp:
@@ -65,7 +42,6 @@ def WriteMulti(location, kcrop, crop, start_year, end_year, crop_file,
                soil_file, weather_file):
 
     simulation = location + 'CROP' + str(kcrop + 1)
-
     file_name = 'input/' + simulation + '.multi'
 
     num_pd = len(crop[0])
@@ -104,21 +80,41 @@ def WriteMulti(location, kcrop, crop, start_year, end_year, crop_file,
                 fp.write('%-20s\n' % ('0'))
 
 
-'''
-Create operation files by replacing variables in a template operation file
-'''
-kcrop = 0
-for c in crops:
-    for kpd in range(len(crops[c][0])):
-        pd = crops[c][0][kpd]
+def main():
 
-        print(crops[c][1])
-        for kfr in range(len(crops[c][1])):
-            fr = crops[c][1][kfr]
+    '''
+    Set up simulation parameters
+    '''
+    start_year = '2000'
+    end_year = '2017'
+    crop_file = 'Ethiopia.crop'
 
-            filen = 'input/CROP%dPD%dFR%d.operation' % (kcrop + 1, kpd + 1,
-                                                        kfr + 1)
-            replacements = {'$CP':c, '$PD':str(pd), '$FR':str(fr),
+    '''
+    Load crop matrix
+    '''
+    crops = crop_matrix()
+
+    '''
+    Create operation files by replacing variables in a template operation file
+    '''
+    num_crops = len(crops)
+    for c, kcrop in zip(crops, range(num_crops)):
+        num_pd = len(crops[c][0])
+        num_fr = len(crops[c][1])
+
+        mat_ind = list(product([kcrop + 1],
+                               list(range(1, num_pd + 1)),
+                               list(range(1, num_fr + 1))))
+
+        mat = list(product([c], crops[c][0], crops[c][1]))
+
+        for ind, config in zip(mat_ind, mat):
+            simulation = 'CROP%dPD%dFR%d' % (ind[0], ind[1], ind[2])
+            pd = config[1]
+            fr = config[2]
+
+            filen = 'input/%s.operation' % (simulation)
+            replacements = {'$CP':config[0], '$PD':str(pd), '$FR':str(fr),
                             '$FD':str(pd - 10), '$TD':str(pd + 20)}
 
             with open('base.operation') as infile, open(filen, 'w') as outfile:
@@ -126,40 +122,43 @@ for c in crops:
                     for src, target in replacements.items():
                         line = line.replace(src, target)
                     outfile.write(line)
-    kcrop += 1
 
-'''
-Create control files and run simulation matrix
-'''
-with open('locations.txt') as fp:
-    for line in fp:
-        location = line.split()[0]
-        weather_file = line.split()[1]
-        soil_file = line.split()[2]
+    '''
+    Create control files and run simulation matrix
+    '''
+    with open('locations.txt') as fp:
+        for line in fp:
+            location = line.split()[0]
+            weather_file = line.split()[1]
+            soil_file = line.split()[2]
 
-        kcrop = 0
-        for c in crops:
-            simulation = '%sCROP%d' % (location, kcrop + 1)
-            base = 'CROP%d%s' % (kcrop + 1, crops[c][2])
+            for c, kcrop in zip(crops, range(num_crops)):
+                simulation = '%sCROP%d' % (location, kcrop + 1)
+                base = 'CROP%d%s' % (kcrop + 1, crops[c][2])
 
-            WriteCtrl(simulation, base, soil_file, weather_file)
-            WriteMulti(location, kcrop, crops[c], start_year,
-                       end_year, crop_file, soil_file, weather_file)
+                # Write control files for the baseline simulation
+                WriteCtrl(simulation, base,
+                          start_year, end_year,
+                          crop_file, soil_file, weather_file)
 
-            # Run baseline simulation in baseline model with spin-up
-            print('Run baseline simulation in spin-up mode and generate re-initialization file')
+                # Write multi-mode files for matrix
+                WriteMulti(location, kcrop, crops[c],
+                           start_year, end_year,
+                           crop_file, soil_file, weather_file)
 
-            cmd = './Cycles -bs -l 1 ' + simulation
-            os.system(cmd)
+                # Run baseline simulation in baseline model with spin-up
+                print('Run baseline simulation in spin-up mode and generate '
+                    're-initialization file')
+                os.system('./Cycles -bs -l 1 ' + simulation)
 
-            #Copy generated re-initialization file into input directory
-            cmd = 'mv output/%s/reinit.dat input/%s.reinit' % (simulation,
-                                                               simulation)
-            os.system(cmd)
+                #Copy generated re-initialization file into input directory
+                os.system('mv output/%s/reinit.dat input/%s.reinit'
+                          % (simulation, simulation))
 
-            # Run batch simulation with re-initialization
-            print('Run batch simulations using re-initialization')
-            cmd = './Cycles -b -m ' + simulation + '.multi'
-            os.system(cmd)
+                # Run batch simulation with re-initialization
+                print('Run batch simulations using re-initialization')
+                os.system('./Cycles -b -m ' + simulation + '.multi')
 
-            kcrop += 1
+
+if __name__ == '__main__':
+    main()
