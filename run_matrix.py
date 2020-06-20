@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
 import os
+import csv
 from itertools import product
+from pathlib import Path
 from crop_matrix import crop_matrix
 
 def WriteCtrl(simulation, base,
@@ -94,70 +96,81 @@ def main():
     '''
     crops = crop_matrix()
 
-    '''
-    Create operation files by replacing variables in a template operation file
-    '''
-    num_crops = len(crops)
-    for c, kcrop in zip(crops, range(num_crops)):
-        num_pd = len(crops[c][0])
-        num_fr = len(crops[c][1])
+    Path('summary').mkdir(exist_ok=True)
 
-        mat_ind = list(product([kcrop + 1],
-                               list(range(1, num_pd + 1)),
-                               list(range(1, num_fr + 1))))
+    with open('summary/matrix_summary.csv', 'w') as csvfile:
+        csvwriter = csv.writer(csvfile)
+        csvwriter.writerow(['simulation', 'crop', 'planting_date',
+                            'nitrogen_rate'])
+        '''
+        Create operation files by replacing variables in a template operation
+        file
+        '''
+        num_crops = len(crops)
+        for c, kcrop in zip(crops, range(num_crops)):
+            num_pd = len(crops[c][0])
+            num_fr = len(crops[c][1])
 
-        mat = list(product([c], crops[c][0], crops[c][1]))
+            mat_ind = list(product([kcrop + 1],
+                                list(range(1, num_pd + 1)),
+                                list(range(1, num_fr + 1))))
 
-        for ind, config in zip(mat_ind, mat):
-            simulation = 'CROP%dPD%dFR%d' % (ind[0], ind[1], ind[2])
-            pd = config[1]
-            fr = config[2]
+            mat = list(product([c], crops[c][0], crops[c][1]))
 
-            filen = 'input/%s.operation' % (simulation)
-            replacements = {'$CP':config[0], '$PD':str(pd), '$FR':str(fr),
-                            '$FD':str(pd - 10), '$TD':str(pd + 20)}
+            for ind, config in zip(mat_ind, mat):
+                simulation = 'CROP%dPD%dFR%d' % (ind[0], ind[1], ind[2])
+                pd = config[1]
+                fr = config[2]
 
-            with open('base.operation') as infile, open(filen, 'w') as outfile:
-                for line in infile:
-                    for src, target in replacements.items():
-                        line = line.replace(src, target)
-                    outfile.write(line)
+                # Write to matrix summary
+                csvwriter.writerow([simulation, config[0], pd, fr])
 
-    '''
-    Create control files and run simulation matrix
-    '''
-    with open('locations.txt') as fp:
-        for line in fp:
-            location = line.split()[0]
-            weather_file = line.split()[1]
-            soil_file = line.split()[2]
+                # Write operation file
+                filen = 'input/%s.operation' % (simulation)
+                replacements = {'$CP':config[0], '$PD':str(pd), '$FR':str(fr),
+                                '$FD':str(pd - 10), '$TD':str(pd + 20)}
 
-            for c, kcrop in zip(crops, range(num_crops)):
-                simulation = '%sCROP%d' % (location, kcrop + 1)
-                base = 'CROP%d%s' % (kcrop + 1, crops[c][2])
+                with open('base.operation') as infile, open(filen, 'w') as outfile:
+                    for line in infile:
+                        for src, target in replacements.items():
+                            line = line.replace(src, target)
+                        outfile.write(line)
 
-                # Write control files for the baseline simulation
-                WriteCtrl(simulation, base,
-                          start_year, end_year,
-                          crop_file, soil_file, weather_file)
+        '''
+        Create control files and run simulation matrix
+        '''
+        with open('locations.txt') as fp:
+            for line in fp:
+                location = line.split()[0]
+                weather_file = line.split()[1]
+                soil_file = line.split()[2]
 
-                # Write multi-mode files for matrix
-                WriteMulti(location, kcrop, crops[c],
-                           start_year, end_year,
-                           crop_file, soil_file, weather_file)
+                for c, kcrop in zip(crops, range(num_crops)):
+                    simulation = '%sCROP%d' % (location, kcrop + 1)
+                    base = 'CROP%d%s' % (kcrop + 1, crops[c][2])
 
-                # Run baseline simulation in baseline model with spin-up
-                print('Run baseline simulation in spin-up mode and generate '
-                    're-initialization file')
-                os.system('./Cycles -bs -l 1 ' + simulation)
+                    # Write control files for the baseline simulation
+                    WriteCtrl(simulation, base,
+                            start_year, end_year,
+                            crop_file, soil_file, weather_file)
 
-                #Copy generated re-initialization file into input directory
-                os.system('mv output/%s/reinit.dat input/%s.reinit'
-                          % (simulation, simulation))
+                    # Write multi-mode files for matrix
+                    WriteMulti(location, kcrop, crops[c],
+                            start_year, end_year,
+                            crop_file, soil_file, weather_file)
 
-                # Run batch simulation with re-initialization
-                print('Run batch simulations using re-initialization')
-                os.system('./Cycles -b -m ' + simulation + '.multi')
+                    # Run baseline simulation in baseline model with spin-up
+                    print('Run baseline simulation in spin-up mode and '
+                          'generate re-initialization file')
+                    os.system('./Cycles -bs -l 1 ' + simulation)
+
+                    #Copy generated re-initialization file into input directory
+                    os.system('mv output/%s/reinit.dat input/%s.reinit'
+                              % (simulation, simulation))
+
+                    # Run batch simulation with re-initialization
+                    print('Run batch simulations using re-initialization')
+                    os.system('./Cycles -b -m ' + simulation + '.multi')
 
 
 if __name__ == '__main__':
