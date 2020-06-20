@@ -4,7 +4,6 @@ import os
 import csv
 from itertools import product
 from pathlib import Path
-from crop_matrix import crop_matrix
 
 def crop_matrix():
     '''
