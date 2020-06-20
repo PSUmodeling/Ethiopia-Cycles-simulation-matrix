@@ -6,6 +6,47 @@ from itertools import product
 from pathlib import Path
 from crop_matrix import crop_matrix
 
+def crop_matrix():
+    '''
+    Matrix configuration
+    '''
+    crops = {}
+    crops['Teff'] = (
+        (182, 189, 196, 203, 210, 217, 224, 231),
+        (0, 30, 60),
+        'PD1FR2')
+    crops['SpringBarley'] = (
+        (135, 142, 149, 156, 163, 170, 177, 184, 191),
+        (0, 25, 50, 100, 200),
+        'PD1FR3')
+    crops['SpringWheat'] = (
+        (135, 142, 149, 156, 163, 170, 177, 184, 191),
+        (0, 25, 50, 100, 200),
+        'PD1FR3')
+    crops['CornRM.110'] = (
+        (121, 128, 135, 142, 149, 156, 163, 170, 177, 184, 191),
+        (0, 25, 50, 100, 200, 400),
+        'PD1FR3')
+    crops['SorghumLS'] = (
+        (121, 128, 135, 142, 149, 156, 163, 170, 177, 184, 191),
+        (0, 25, 50, 100, 200, 400),
+        'PD1FR3')
+    crops['Millet'] = (
+        (182, 189, 196, 203, 210, 217, 224, 231),
+        (0, 25, 50, 100, 200, 400),
+        'PD1FR3')
+    crops['Chickpea'] = (
+        (182, 189, 196, 203, 210, 217, 224, 231),
+        (0,),
+        'PD1FR1')
+    crops['SpringLentils'] = (
+        (182, 189, 196, 203, 210, 217, 224, 231),
+        (0,),
+        'PD1FR1')
+
+    return crops
+
+
 def WriteCtrl(simulation, base,
               start_year, end_year,
               crop_file, soil_file, weather_file):
