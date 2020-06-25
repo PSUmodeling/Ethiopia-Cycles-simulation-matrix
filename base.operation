@@ -6,11 +6,22 @@
 TILLAGE
 YEAR                1
 DOY                 $FD
+TOOL                Grain_Harvest
+DEPTH               0
+SOIL_DISTURB_RATIO  0
+MIXING_EFFICIENCY   0
+CROP_NAME           $CP
+FRAC_THERMAL_TIME   0.0
+KILL_EFFICIENCY     0.0
+
+TILLAGE
+YEAR                1
+DOY                 $FD
 TOOL                Kill_Crop
 DEPTH               0
 SOIL_DISTURB_RATIO  0
 MIXING_EFFICIENCY   0
-CROP_NAME           N/A
+CROP_NAME           All
 FRAC_THERMAL_TIME   0.0
 KILL_EFFICIENCY     0.0
 
