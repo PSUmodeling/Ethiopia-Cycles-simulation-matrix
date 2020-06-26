@@ -49,37 +49,40 @@ with open('locations.txt') as fp:
                                 'n_fixation'
                                ])
             for sim in mat:
-                print('%s%s' % (location, sim[0]))
-                with open('output/%s/season.dat' % (location + sim[0])) as season_file:
+                filen = 'output/%s/season.dat' % (location + sim[0])
+                if not os.path.exists(filen):
+                    print('Output %s is missing.' % (file_name))
+
+                with open(filen) as season_file:
                     csvreader = csv.reader(season_file, delimiter='\t')
                     next(csvreader)
                     next(csvreader)
                     for row in csvreader:
-                        csvwriter.writerow([
-                                            sim[0].strip(),
-                                            row[1].strip(),
-                                            location.strip(),
-                                            sim[2].strip(),
-                                            sim[3].strip(),
-                                            row[0][:4].strip(),
-                                            row[3].strip(),
-                                            row[4].strip(),
-                                            row[5].strip(),
-                                            row[6].strip(),
-                                            row[7].strip(),
-                                            row[8].strip(),
-                                            row[9].strip(),
-                                            row[10].strip(),
-                                            row[11].strip(),
-                                            row[12].strip(),
-                                            row[13].strip(),
-                                            row[14].strip(),
-                                            row[15].strip(),
-                                            row[16].strip(),
-                                            row[17].strip(),
-                                            row[18].strip(),
-                                            row[19].strip(),
-                                            row[20].strip(),
-                                            row[21].strip()
-                                           ])
+                        if (int(row[2][:4]) < 2018):
+                            csvwriter.writerow([sim[0].strip(),
+                                                row[1].strip(),
+                                                location.strip(),
+                                                sim[2].strip(),
+                                                sim[3].strip(),
+                                                row[2][:4].strip(),
+                                                row[3].strip(),
+                                                row[4].strip(),
+                                                row[5].strip(),
+                                                row[6].strip(),
+                                                row[7].strip(),
+                                                row[8].strip(),
+                                                row[9].strip(),
+                                                row[10].strip(),
+                                                row[11].strip(),
+                                                row[12].strip(),
+                                                row[13].strip(),
+                                                row[14].strip(),
+                                                row[15].strip(),
+                                                row[16].strip(),
+                                                row[17].strip(),
+                                                row[18].strip(),
+                                                row[19].strip(),
+                                                row[20].strip(),
+                                                row[21].strip()
+                                ])
 
