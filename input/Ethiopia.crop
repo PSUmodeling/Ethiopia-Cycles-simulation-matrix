@@ -58,7 +58,7 @@ STANDING_RESIDUE_AT_HARVEST                 40          # (%)
 RESIDUE_REMOVED                             0           # (%)
 CLIPPING_BIOMASS_THRESHOLD_UPPER            999         # (Mg/ha)
 CLIPPING_BIOMASS_THRESHOLD_LOWER            0.5         # (Mg/ha)
-HARVEST_TIMING                              90          # (%)
+HARVEST_TIMING                              -999        # (%)
 KILL_AFTER_HARVEST                          1
 CLIPPING_BIOMASS_DESTINY                    REMOVE
 MIN_TEMPERATURE_FOR_TRANSPIRATION           6           # (degree C)
@@ -212,7 +212,7 @@ N_MAX_CONCENTRATION                         0.07        # (g/g)
 N_DILUTION_SLOPE                            0.4
 KC                                          1
 ANNUAL                                      1
-LEGUME                                      0
+LEGUME                                      1
 C3                                          0
 LWP_STRESS_ONSET                            -1400       # (J/kg)
 LWP_WILTING_POINT                           -2300       # (J/kg)
@@ -256,7 +256,7 @@ N_MAX_CONCENTRATION                         0.07        # (g/g)
 N_DILUTION_SLOPE                            0.4
 KC                                          1
 ANNUAL                                      1
-LEGUME                                      0
+LEGUME                                      1
 C3                                          1
 LWP_STRESS_ONSET                            -1100       # (J/kg)
 LWP_WILTING_POINT                           -2000       # (J/kg)
